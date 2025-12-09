@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seediq - Castoria Seed Quality Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">
+                <i class="fas fa-seedling"></i>
+                <span>SEEDIQ</span>
+            </a>
+            <ul class="nav-links">
+  <li><a href="#home">Home</a></li>
+                <li><a href="#analyzer">Analyzer</a></li>
+                <li><a href="#guide">Quality Guide</a></li>
+                <li><a href="#standards">Standards</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>Castoria Seed Quality & Size Differentiation</h1>
+            <p>Advanced tool for farmers, traders, and researchers to analyze and grade castoria seeds accurately</p>
+            <a href="#analyzer" class="btn-primary">Start Analysis</a>
+        </div>
+    </section>
+
+    <!-- Seed Analyzer -->
+    <section id="analyzer" class="analyzer-section">
+        <div class="container">
+            <h2>Seed Quality Analyzer</h2>
+            <p class="section-subtitle">Upload seed images or enter measurements for detailed analysis</p>
+            
+            <div class="analyzer-container">
+                <!-- Input Methods -->
+                <div class="input-methods">
+                    <div class="method-card" id="manual-input">
+                        <i class="fas fa-ruler-combined"></i>
+                        <h3>Manual Input</h3>
+                        <p>Enter seed measurements manually</p>
+                        <button class="btn-secondary" onclick="showManualInput()">Select</button>
+                    </div>
+                    
+                    <div class="method-card" id="image-upload">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h3>Image Analysis</h3>
+                        <p>Upload seed images for automatic analysis</p>
+                        <button class="btn-secondary" onclick="triggerImageUpload()">Select</button>
+                        <input type="file" id="seed-image" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+                    </div>
+                </div>
+
+                <!-- Manual Input Form -->
+                <div id="manual-input-form" class="input-form" style="display: none;">
+                    <h3>Enter Seed Specifications</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="seed-length">Length (mm)</label>
+                            <input type="number" id="seed-length" step="0.1" placeholder="e.g., 8.5">
+                        </div>
+                        <div class="form-group">
+                            <label for="seed-width">Width (mm)</label>
+                            <input type="number" id="seed-width" step="0.1" placeholder="e.g., 5.2">
+                        </div>
+                        <div class="form-group">
+                            <label for="seed-weight">Weight per 100 seeds (g)</label>
+                            <input type="number" id="seed-weight" step="0.01" placeholder="e.g., 15.3">
+                        </div>
+                        <div class="form-group">
+                            <label for="seed-color">Color Grade</label>
+                            <select id="seed-color">
+                                <option value="">Select color</option>
+                                <option value="dark-brown">Dark Brown (Premium)</option>
+                                <option value="medium-brown">Medium Brown (Standard)</option>
+                                <option value="light-brown">Light Brown (Regular)</option>
+                                <option value="mixed">Mixed Colors</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="seed-uniformity">Uniformity (%)</label>
+                            <input type="range" id="seed-uniformity" min="0" max="100" value="90">
+                            <span id="uniformity-value">90%</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="seed-damage">Damage/Impurities (%)</label>
+                            <input type="range" id="seed-damage" min="0" max="50" value="5">
+                            <span id="damage-value">5%</span>
+                        </div>
+                    </div>
+                    <button class="btn-primary" onclick="analyzeSeeds()">Analyze Seeds</button>
+                </div>
+
+                <!-- Image Upload Preview -->
+                <div id="image-preview-container" style="display: none;">
+                    <div class="image-preview">
+                        <img id="preview-image" src="" alt="Seed Preview">
+                        <button class="btn-secondary" onclick="analyzeImage()">Analyze Image</button>
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <div id="results-container" style="display: none;">
+                    <h3>Analysis Results</h3>
+                    <div class="results-grid">
+                        <div class="result-card">
+                            <h4>Size Grade</h4>
+                            <div class="grade-display" id="size-grade">-</div>
+                            <p id="size-details">No data</p>
+                        </div>
+                        <div class="result-card">
+                            <h4>Quality Grade</h4>
+                            <div class="grade-display" id="quality-grade">-</div>
+                            <p id="quality-details">No data</p>
+                        </div>
+                        <div class="result-card">
+                            <h4>Overall Classification</h4>
+                            <div class="classification" id="overall-class">-</div>
+                            <p id="class-details">No data</p>
+                        </div>
+                    </div>
+                    
+                    <div class="detailed-results">
+                        <h4>Detailed Metrics</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                    <th>Standard</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="metrics-table">
+                                <!-- Filled by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="recommendations">
+                        <h4>Recommendations</h4>
+                        <ul id="recommendations-list">
+                            <!-- Filled by JavaScript -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quality Guide -->
+    <section id="guide" class="guide-section">
+        <div class="container">
+            <h2>Castoria Seed Quality Standards</h2>
+            <div class="guide-grid">
+                <div class="guide-card grade-a">
+                    <div class="grade-header">
+                        <h3>Grade A (Premium)</h3>
+                        <div class="grade-badge">A</div>
+                    </div>
+                    <ul>
+                        <li><strong>Size:</strong> 8-10 mm length</li>
+                        <li><strong>Weight:</strong> 14-16g/100 seeds</li>
+                        <li><strong>Color:</strong> Uniform dark brown</li>
+                        <li><strong>Purity:</strong> 99%+</li>
+                        <li><strong>Germination:</strong> 95%+</li>
+                    </ul>
+                    <p class="use-case">Best for export & certified planting</p>
+                </div>
+                
+                <div class="guide-card grade-b">
+                    <div class="grade-header">
+                        <h3>Grade B (Standard)</h3>
+                        <div class="grade-badge">B</div>
+                    </div>
+                    <ul>
+                        <li><strong>Size:</strong> 7-9 mm length</li>
+                        <li><strong>Weight:</strong> 12-14g/100 seeds</li>
+                        <li><strong>Color:</strong> Medium brown</li>
+                        <li><strong>Purity:</strong> 95-98%</li>
+                        <li><strong>Germination:</strong> 85-94%</li>
+                    </ul>
+                    <p class="use-case">Commercial farming & processing</p>
+                </div>
+                
+                <div class="guide-card grade-c">
+                    <div class="grade-header">
+                        <h3>Grade C (Regular)</h3>
+                        <div class="grade-badge">C</div>
+                    </div>
+                    <ul>
+                        <li><strong>Size:</strong> 6-8 mm length</li>
+                        <li><strong>Weight:</strong> 10-12g/100 seeds</li>
+                        <li><strong>Color:</strong> Light to mixed brown</li>
+                        <li><strong>Purity:</strong> 90-94%</li>
+                        <li><strong>Germination:</strong> 75-84%</li>
+                    </ul>
+                    <p class="use-case">Local markets & industrial use</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Size Visualization -->
+    <section id="standards" class="visualization-section">
+        <div class="container">
+            <h2>Seed Size Comparison</h2>
+            <div class="size-comparison">
+                <div class="size-item" data-size="10">
+                    <div class="size-circle grade-a"></div>
+                    <p>Grade A<br>8-10mm</p>
+                </div>
+                <div class="size-item" data-size="8.5">
+                    <div class="size-circle grade-b"></div>
+                    <p>Grade B<br>7-9mm</p>
+                </div>
+                <div class="size-item" data-size="7">
+                    <div class="size-circle grade-c"></div>
+                    <p>Grade C<br>6-8mm</p>
+                </div>
+            </div>
+            
+            <div class="quality-factors">
+                <h3>Key Quality Factors</h3>
+                <div class="factors-grid">
+                    <div class="factor">
+                        <i class="fas fa-weight-hanging"></i>
+                        <h4>Weight Density</h4>
+                        <p>Higher weight indicates better oil content</p>
+                    </div>
+                    <div class="factor">
+                        <i class="fas fa-ruler"></i>
+                        <h4>Size Uniformity</h4>
+                        <p>Consistent size ensures even processing</p>
+                    </div>
+                    <div class="factor">
+                        <i class="fas fa-palette"></i>
+                        <h4>Color Consistency</h4>
+                        <p>Uniform color indicates proper maturity</p>
+                    </div>
+                    <div class="factor">
+                        <i class="fas fa-leaf"></i>
+                        <h4>Germination Rate</h4>
+                        <p>Directly correlated with seed viability</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="about">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-seedling"></i>
+                    <h3>SEEDIQ</h3>
+                    <p>Precision Seed Analysis</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <a href="#">Seed Standards PDF</a>
+                    <a href="#">Research Papers</a>
+                    <a href="#">Industry Guidelines</a>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-envelope"></i> info@seediq.com</p>
+                    <p><i class="fas fa-phone"></i> +234 (8151888867) </p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Seediq.com - Castoria Seed Analysis Platform</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
