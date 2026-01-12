@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seed Analysis Tool | Application</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-seedling"></i>
+                <span>SeedIQ</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="about.html" class="nav-link"><i class="fas fa-info-circle"></i> About</a></li>
+                <li><a href="app.html" class="nav-link active"><i class="fas fa-cogs"></i> Analyzer</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Seed Quality Analyzer</h1>
+            <p>Upload seed images or enter measurements for detailed analysis</p>
+        </div>
+    </section>
+
+    <!-- Main Application Section -->
+    <section class="section app-section">
+        <div class="container">
+            <div class="app-container">
+                <!-- Left Panel - Input Methods -->
+                <div class="input-panel">
+                    <div class="tabs">
+                        <button class="tab-button active" data-tab="image-analysis">
+                            <i class="fas fa-camera"></i> Image Analysis
+                        </button>
+                        <button class="tab-button" data-tab="manual-input">
+                            <i class="fas fa-keyboard"></i> Manual Input
+                        </button>
+                    </div>
+                    
+                    <!-- Image Analysis Tab -->
+                    <div class="tab-content active" id="image-analysis">
+                        <div class="upload-area" id="uploadArea">
+                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                            <h3>Upload Seed Images</h3>
+                            <p>Drag & drop or click to upload seed images for analysis</p>
+                            <p class="upload-note">Supports JPG, PNG, WEBP (Max 5MB)</p>
+                            <input type="file" id="seedImage" accept="image/*" style="display: none;">
+                            <button class="btn btn-primary" id="uploadButton">
+                                <i class="fas fa-upload"></i> Select Image
+                            </button>
+                            <div class="image-preview" id="imagePreview">
+                                <!-- Preview will appear here -->
+                            </div>
+                        </div>
+                        
+                        <div class="analysis-controls">
+                            <h4>Analysis Settings</h4>
+                            <div class="setting">
+                                <label for="analysisType">Analysis Type:</label>
+                                <select id="analysisType">
+                                    <option value="quick">Quick Analysis</option>
+                                    <option value="detailed" selected>Detailed Analysis</option>
+                                    <option value="batch">Batch Analysis</option>
+                                </select>
+                            </div>
+                            <div class="setting">
+                                <label>
+                                    <input type="checkbox" id="autoDetect" checked> 
+                                    Auto-detect multiple seeds
+                                </label>
+                            </div>
+                            <button class="btn btn-primary btn-block" id="analyzeButton">
+                                <i class="fas fa-play"></i> Start Analysis
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Manual Input Tab -->
+                    <div class="tab-content" id="manual-input">
+                        <div class="manual-input-form">
+                            <h3>Enter Seed Specifications</h3>
+                            <div class="form-group">
+                                <label for="seedLength">Seed Length (mm)</label>
+                                <div class="input-with-slider">
+                                    <input type="number" id="seedLength" min="5" max="12" step="0.1" value="8.5">
+                                    <div class="slider-container">
+                                        <input type="range" id="lengthSlider" min="5" max="12" step="0.1" value="8.5" class="slider">
+                                        <div class="slider-labels">
+                                            <span>5mm</span>
+                                            <span>12mm</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="seedWeight">Weight per 100 seeds (g)</label>
+                                <div class="input-with-slider">
+                                    <input type="number" id="seedWeight" min="8" max="18" step="0.1" value="14.5">
+                                    <div class="slider-container">
+                                        <input type="range" id="weightSlider" min="8" max="18" step="0.1" value="14.5" class="slider">
+                                        <div class="slider-labels">
+                                            <span>8g</span>
+                                            <span>18g</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="colorUniformity">Color Uniformity</label>
+                                <div class="slider-container">
+                                    <input type="range" id="colorUniformity" min="1" max="100" value="90" class="slider">
+                                    <div class="slider-value">90%</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="purity">Purity Percentage</label>
+                                <div class="slider-container">
+                                    <input type="range" id="purity" min="80" max="100" value="95" class="slider">
+                                    <div class="slider-value">95%</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="germination">Germination Rate</label>
+                                <div class="slider-container">
+                                    <input type="range" id="germination" min="70" max="100" value="92" class="slider">
+                                    <div class="slider-value">92%</div>
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-primary btn-block" id="manualAnalyzeButton">
+                                <i class="fas fa-calculator"></i> Analyze Manual Input
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Panel - Results -->
+                <div class="results-panel">
+                    <div class="results-header">
+                        <h2><i class="fas fa-chart-bar"></i> Analysis Results</h2>
+                        <div class="results-status" id="resultsStatus">
+                            <i class="fas fa-info-circle"></i> No data available
+                        </div>
+                    </div>
+                    
+                    <div class="results-content">
+                        <!-- Grades Summary -->
+                        <div class="grades-summary">
+                            <div class="grade-result">
+                                <h3>Size Grade</h3>
+                                <div class="grade-display" id="sizeGrade">
+                                    <div class="grade-placeholder">No data</div>
+                                </div>
+                            </div>
+                            <div class="grade-result">
+                                <h3>Quality Grade</h3>
+                                <div class="grade-display" id="qualityGrade">
+                                    <div class="grade-placeholder">No data</div>
+                                </div>
+                            </div>
+                            <div class="grade-result">
+                                <h3>Overall Classification</h3>
+                                <div class="grade-display" id="overallGrade">
+                                    <div class="grade-placeholder">No data</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Progress Indicators -->
+                        <div class="progress-section">
+                            <h3>Parameter Analysis</h3>
+                            <div class="progress-item">
+                                <div class="progress-label">
+                                    <span>Size Score</span>
+                                    <span id="sizePercent">0%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="sizeProgress" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="progress-item">
+                                <div class="progress-label">
+                                    <span>Weight Score</span>
+                                    <span id="weightPercent">0%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="weightProgress" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="progress-item">
+                                <div class="progress-label">
+                                    <span>Quality Score</span>
+                                    <span id="qualityPercent">0%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="qualityProgress" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Detailed Metrics Table -->
+                        <div class="metrics-table">
+                            <h3>Detailed Metrics</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Value</th>
+                                        <th>Standard</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="metricsTable">
+                                    <tr>
+                                        <td colspan="4" class="no-data">No analysis data available</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Recommendations -->
+                        <div class="recommendations">
+                            <h3><i class="fas fa-lightbulb"></i> Recommendations</h3>
+                            <div class="recommendation-content" id="recommendations">
+                                <p class="no-data">Upload seed images or enter measurements to get personalized recommendations.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Export Options -->
+                        <div class="export-options">
+                            <button class="btn btn-secondary" id="exportPDF">
+                                <i class="fas fa-file-pdf"></i> Export PDF
+                            </button>
+                            <button class="btn btn-secondary" id="exportCSV">
+                                <i class="fas fa-file-csv"></i> Export CSV
+                            </button>
+                            <button class="btn btn-secondary" id="saveReport">
+                                <i class="fas fa-save"></i> Save Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section how-it-works">
+        <div class="container">
+            <h2>How Image Analysis Works</h2>
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">
+                        <i class="fas fa-upload"></i>
+                    </div>
+                    <h3>Upload Image</h3>
+                    <p>Upload a clear image of castoria seeds against a contrasting background.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3>ML Processing</h3>
+                    <p>Our machine learning model analyzes size, shape, and color characteristics.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Parameter Extraction</h3>
+                    <p>Key parameters like size, estimated weight, and uniformity are calculated.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-icon">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <h3>Grade Assignment</h3>
+                    <p>Seeds are classified into A, B, or C grades based on international standards.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <i class="fas fa-seedling"></i>
+                        <span>SeedIQ</span>
+                    </a>
+                    <p>Advanced seed analysis tool for farmers, traders, and researchers.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Pages</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About & Standards</a></li>
+                        <li><a href="app.html">Seed Analyzer</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">User Guide</a></li>
+                        <li><a href="#">Research Papers</a></li>
+                        <li><a href="#">API Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> contact@seediq.com</li>
+                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Agricultural Research Center</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom
